@@ -2,17 +2,20 @@
 
 var app = angular.module('myApp');
 
-app.service('Resident', function($http, $q){
+app.service('Picture', function($http, $q){
 
   this.getAll = () =>{
-    return $http.get('/api/residents');
+    return $http.get('/api/pictures');
   }
 
   this.getById = id =>{
-    return $http.get(`/api/residents/${id}`);
+    return $http.get(`/api/pictures/${id}`);
   }
-  this.addResident = (resident) =>{
-    return $http.post(`/api/residents`, resident)
+
+
+  this.addPicture = (picture) =>{
+    console.log("add pic in servies: ", picture);
+    return $http.post(`/api/pictures`, picture)
       .then(res => {
         return $q.resolve(res.data);
       })
@@ -21,8 +24,8 @@ app.service('Resident', function($http, $q){
       })
     };
 
-  this.deleteResident = (id) =>{
-    return $http.delete(`/api/residents/${id}`)
+  this.deletePicture = (id) =>{
+    return $http.delete(`/api/pictures/${id}`)
       .then( () => {
         return $q.resolve();
       })
@@ -31,30 +34,21 @@ app.service('Resident', function($http, $q){
       })
     };
 
-  this.updateResident = (id, resident) =>{
-      return $http.put(`/api/residents/${id}`, resident)
-      .then(res => {
-        return $q.resolve(resident);
-      })
-      .catch(err => {   
-        console.log('err:', err);
-      })
-    };
 
 });
 
-app.service('Apartment', function($http, $q){
+app.service('Album', function($http, $q){
 
   this.getAll = () =>{
-    return $http.get('/api/apartments');
+    return $http.get('/api/albums');
   }
 
   this.getById = id =>{
-    return $http.get(`/api/apartments/${id}`);
+    return $http.get(`/api/albums/${id}`);
   }
 
-  this.addApartment = (apartment) =>{
-    return $http.post(`/api/apartments`, apartment)
+  this.addAlbum = (album) =>{
+    return $http.post(`/api/albums`, album)
       .then(res => {
         return $q.resolve(res.data);
       })
@@ -63,8 +57,8 @@ app.service('Apartment', function($http, $q){
       })
     };
 
-  this.deleteApartment = (id) =>{
-    return $http.delete(`/api/apartments/${id}`)
+  this.deleteAlbum = (id) =>{
+    return $http.delete(`/api/albums/${id}`)
       .then( () => {
         return $q.resolve();
       })
@@ -73,28 +67,29 @@ app.service('Apartment', function($http, $q){
       })
     };
 
-  this.updateApartment = (id, apartment) =>{
-      return $http.put(`/api/apartments/${id}`, apartment)
+  this.updateAlbum = (id, album) =>{
+      return $http.put(`/api/albums/${id}`, album)
       .then(res => {
-        return $q.resolve(apartment);
+        return $q.resolve(album);
       })
       .catch(err => {   
         console.log('err:', err);
       })
     };
 
-  this.addNewResident = (apId, resId) =>{
-      return $http.put(`/api/apartments/${apId}/addResident/${resId}`)
+  this.addPictureToAlbum = (albumId, picId) =>{
+      return $http.put(`/api/albums/${albumId}/addPicture/${picId}`)
       .then(res => {
-        return $q.resolve();
+        return $q.resolve(res.data);
       })
       .catch(err => {   
         console.log('err:', err);
       })
     };
 
-  this.removeResident = (apId, resId) =>{
-      return $http.put(`/api/apartments/${apId}/removeResident/${resId}`)
+  this.removePictureFromAlbum = (albumId, picId) =>{
+       console.log("remove from album");
+      return $http.put(`/api/albums/${albumId}/removePicture/${picId}`)
       .then(res => {
         return $q.resolve();
       })

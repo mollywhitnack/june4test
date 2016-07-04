@@ -2,40 +2,44 @@
 
 var app = angular.module('myApp');
 
-app.controller('mainCtrl', function($scope, Resident, Apartment) {
- Resident.getAll()
+app.controller('mainCtrl', function($scope, Picture, Album) {
+
+ Picture.getAll()
     .then(res =>{
-      $scope.residents = res.data;
-      console.log("$scope.residents:", $scope.residents);
+      $scope.pictures = res.data;
     })
     .catch(err =>{
       console.log("err: ", err);
     })
 
-    Apartment.getAll()
+    Album.getAll()
     .then(res =>{
-      $scope.apartments = res.data;
-      console.log("$scope.apartments:", $scope.apartments);
+      $scope.albums = res.data;
+      console.log("$scope.apartments:", $scope.albums);
     })
     .catch(err =>{
       console.log("err: ", err);
     })
+
+
+
+
 });
 
-app.controller('apartmentListCtrl', function($scope, Apartment) {
-  Apartment.getAll()
+app.controller('albumsCtrl', function($scope, Album) {
+  Album.getAll()
     .then(res =>{
-      $scope.apartments = res.data;
-      console.log("$scope.apartments:", $scope.apartments);
+      $scope.albums = res.data;
+      console.log("$scope.albums:", $scope.albums);
     })
     .catch(err =>{
       console.log("err: ", err);
     })
 
-    $scope.addApartment = () =>{
-      Apartment.addApartment($scope.newItem)
-      .then(apartment =>{
-        $scope.apartments.push(apartment);
+    $scope.addAlbum = () =>{
+      Album.addAlbum($scope.newItem)
+      .then(album =>{
+        $scope.albums.push(album);
         $scope.newItem = {};
       })
       .catch(err=>{
@@ -44,30 +48,30 @@ app.controller('apartmentListCtrl', function($scope, Apartment) {
     }
 
 
-  $scope.deleteApartment = (ind, apartment) =>{
-    console.log("apartment:", apartment)
-    Apartment.deleteApartment(apartment._id)
-    .then(apartment => {
+  $scope.deleteAlbum = (ind, album) =>{
+    console.log("album:", album)
+    Album.deleteAlbum(album._id)
+    .then(album => {
       //console.log("item to add", item);
-      $scope.apartments.splice(ind,1);
+      $scope.albums.splice(ind,1);
     })
     .catch(err=>{
       console.log("error: ", err );
     });
   }
 
-  $scope.showUpdateForm = (index, apartment) =>{
+  $scope.showUpdateForm = (index, album) =>{
     console.log("index: ", index);
-    console.log("apartment: ", apartment);
+    console.log("album: ", album);
     $scope.showUpdate =true;
-    $scope.updateItem = apartment;
+    $scope.updateItem = album;
     $scope.updateIndex = index;
   }
 
-  $scope.updateApartment = () =>{
+  $scope.updateAlbum = () =>{
     $scope.showUpdate =false;
-    Apartment.updateApartment($scope.updateItem._id, $scope.updateItem)
-    .then(apartment =>{
+    Album.updateAlbum($scope.updateItem._id, $scope.updateItem)
+    .then(album =>{
       console.log("update apt:" , $scope.updateItem._id, " , " , $scope.updateItem);
     })
     .catch(err=>{
@@ -78,28 +82,64 @@ app.controller('apartmentListCtrl', function($scope, Apartment) {
 });
 
 
-app.controller('showApartmentCtrl', function($scope, Apartment, $stateParams) {
-  console.log('showApartmentCtrl!');
+app.controller('showAlbumCtrl', function($scope, Album, Picture, $stateParams) {
+  console.log('showAlbumCtrl!');
   console.log('$stateParams:', $stateParams);   //this will be apt id
 
-  $scope.currentResidents = [];
-  $scope.availableResidents = $scope.residents;;
+  $scope.currentPictures = [];
+  $scope.availableResidents = $scope.pictures;;
   //or w/e my func is called
-  Apartment.getById($stateParams.apartmentId)
+  Album.getById($stateParams.albumId)
     .then(res =>{
-      $scope.apartment = res.data;
-      getCurrentResidents()
+      $scope.album = res.data;
+      getCurrentPictures()
     })
 
-  function getCurrentResidents(){
-    console.log("$scope.residents:", $scope.residents);
-    console.log("$scope.apartment.residents:", $scope.apartment.residents);
-    for(var j = 0; j< $scope.residents.length; j++){
-      for(var i =0; i< $scope.apartment.residents.length; i++){
-      console.log("compare:" , $scope.apartment.residents[i], " vs ", $scope.residents[j]._id);
-        if($scope.apartment.residents[i] === $scope.residents[j]._id){
-          $scope.currentResidents.push($scope.residents[j])
-          $scope.availableResidents.splice(j, 1)
+  //adds picture to picture databse
+  //need to add picture to album
+  $scope.addPicture = ()=>{
+    Picture.addPicture($scope.newItem)
+    .then(picture=>{
+      console.log("added" , picture);
+      Album.addPictureToAlbum($stateParams.albumId, picture._id)
+    })
+    .catch(err=>{
+      console.log("error: ", err );
+    })
+  }
+
+  /*function addPictureToAlbum(albumId){
+      Album.addPictureToAlbum(albumId, $scope.cuurPic._id){
+
+      }
+  }*/
+
+    
+    //577aa9c5fb3a05962ef543d4
+    //577aa9cffb3a05962ef543d7
+    //577aad2238bbf4c62e9284ca
+
+  $scope.deletePicture = (ind, picId) =>{
+    console.log("picture:", picId)
+    Album.removePictureFromAlbum($scope.album._id, picId);
+    Picture.deletePicture(picId)
+    .then(picture => {
+      $scope.pictures.splice(ind,1);
+    })
+    .catch(err=>{
+      console.log("error: ", err );
+    });
+  }
+
+  function getCurrentPictures(){
+    console.log("$scope.pictures:", $scope.pictures);
+    console.log("$scope.album.picture:", $scope.album.picture);
+    for(var j = 0; j< $scope.pictures.length; j++){
+      for(var i =0; i< $scope.album.picture.length; i++){
+      console.log("compare:" , $scope.album.picture[i], " vs ", $scope.pictures[j]._id);
+        if($scope.album.picture[i] === $scope.pictures[j]._id){
+          console.log("match");
+          $scope.currentPictures.push($scope.pictures[j])
         }
       }
       console.log("i:", i , "j:", j );
@@ -108,62 +148,8 @@ app.controller('showApartmentCtrl', function($scope, Apartment, $stateParams) {
     //console.log('$scope.CurrentResidents', $scope.currentResidents)
   }
 
-  $scope.addResident = (resId)=>{
-  console.log("resId:", resId);
-  Apartment.addNewResident($scope.apartment._id, resId)
-    .then()
-    .catch(err=>{
-      console.log("error: ", err );
-    })
-  }
 
- $scope.removeResident = (resId)=>{
-  console.log("resId:", resId);
-  Apartment.removeResident($scope.apartment._id, resId)
-    .then()
-    .catch(err=>{
-      console.log("error: ", err );
-    })
-  }
-  
-});
-
-
-app.controller('residentListCtrl', function($scope, Resident) {
-  Resident.getAll()
-    .then(res =>{
-      $scope.residents = res.data;
-      console.log("$scope.residents:", $scope.residents);
-    })
-    .catch(err =>{
-      console.log("err: ", err);
-    })
-
-    $scope.addResident = () =>{
-      Resident.addResident($scope.newItem)
-      .then(resident =>{
-        $scope.residents.push(resident);
-        $scope.newItem = {};
-      })
-      .catch(err=>{
-        console.log("error: ", err );
-      });
-    }
-
-
-  $scope.deleteResident = (ind, resident) =>{
-    console.log("resident:", resident)
-    Resident.deleteResident(resident._id)
-    .then(resident => {
-      //console.log("item to add", item);
-      $scope.residents.splice(ind,1);
-    })
-    .catch(err=>{
-      console.log("error: ", err );
-    });
-  }
-
-  $scope.showUpdateForm = (index, resident) =>{
+  /*$scope.showUpdateForm = (index, resident) =>{
     console.log("index: ", index);
     console.log("resident: ", resident);
     $scope.showUpdate =true;
@@ -181,10 +167,9 @@ app.controller('residentListCtrl', function($scope, Resident) {
     .catch(err=>{
       console.log("error: ", err );
     });
-  }
+  }*/
 
 });
-
 
 app.controller('showResdientCtrl', function($scope, Resident, $stateParams) {
   console.log('showResdientCtrl!');
@@ -197,10 +182,10 @@ app.controller('showResdientCtrl', function($scope, Resident, $stateParams) {
     })
 });
 
-app.controller('manageCtrl', function($scope, $stateParams, Apartment, Resident ) {
+app.controller('manageCtrl', function($scope, $stateParams, Album, Resident ) {
   console.log('manageCtrl!');
 
-  //console.log("total Income", Apartment.allPropertyIncomes())
+  //console.log("total Income", Album.allPropertyIncomes())
   
 });
 

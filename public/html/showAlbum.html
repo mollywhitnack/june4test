@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Show Album</title>
+</head>
+<body ng-app='myApp' ng-controller='showAlbumCtrl'>
+<div class = "container">
+
+<span class = "aptDesc">
+<h1>{{album.name}} </h1>
+
+</span>
+
+<hr>
+
+<!--Table for each picture in album w/ delte button-->
+
+<table class = 'table' ng-hide = "currentPictures.length ===0">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat = 'picture in currentPictures track by $index'>
+      <td > 
+        <a ui-sref = 'showpicture({pictureId: picture._id})'>{{picture.name}}</a>
+      </td>
+      <td ><img src="{{picture.url}}" alt="picture" style="height:100px"></td>
+      <td>
+        <button class="btn btn-danger" ng-click = 'deletePicture($index, picture._id)'>Delete</button><br><br>
+      </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <form ng-submit = 'addPicture(album._id)' ng-hide = "showUpdate">
+  <div class="form-group">
+      <label>Picture Name</label>
+      <input type="text" class="form-control" placeholder="Picture Name" ng-model = 'newItem.name' required>
+      <label>Picture URL</label>
+      <input type="text" class="form-control" placeholder="picture url" ng-model = 'newItem.url' required>
+    </div>
+    <div class = "text-center submitbt"><button type="submit" class="btn btn-primary">Add New Picture</button></div>
+  </form>
+
+
+</div>
+</body>
+</html>

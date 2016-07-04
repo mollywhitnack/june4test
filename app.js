@@ -41,7 +41,7 @@ app.use('/api', require ('./routes/api'));
 ///////////////////
 
 app.use('/', (req, res) => {
-  res.render('index', {title: 'Express Template'});
+  res.render('index', {title: 'Photo Album'});
 });
 
 // catch 404 and forward to error handler

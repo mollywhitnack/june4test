@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Albums</title>
+</head>
+<body ng-app='myApp' ng-controller='albumsCtrl'>
+<div class = "container">
+  <h1>Albums</h1>
+
+    <table class = 'table' ng-hide = "albums.length ===0">
+    <thead>
+      <tr>
+        <th>Name</th>
+      </tr>
+      <tr></tr>
+      <tr></tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat = 'album in albums track by $index'>
+        <td > 
+          <a ui-sref = 'showAlbum({albumId: album._id})'>{{album.name}}</a>
+        </td>
+        <td>
+          <button class="btn btn-danger" ng-click = 'deleteAlbum($index, album)'>Delete</button>
+        </td>
+        <td>
+          <button class="btn btn-warning" ng-click = 'showUpdateForm($index, album)'>Update</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+<form ng-submit = 'addAlbum()' ng-hide = "showUpdate">
+  <div class="form-group">
+      <label>Album Name</label>
+      <input type="text" class="form-control" placeholder="Album Name" ng-model = 'newItem.name' required>
+    </div>
+    <div class = "text-center submitbt"><button type="submit" class="btn btn-primary">Add New Album</button></div>
+  </form>
+
+<form ng-submit = 'updateApartment()' ng-show = "showUpdate">
+  <div class="form-group">
+      <label >New Name</label>
+      <input type="text" class="form-control" ng-model = 'updateItem.name' required>
+    </div>
+    <div class = "text-center submitbt"><button type="submit" class="btn btn-success">Submit Edit</button></div>
+  </form>
+
+
+
+</div>
+</body>
+</html>
