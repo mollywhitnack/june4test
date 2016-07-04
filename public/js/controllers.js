@@ -49,7 +49,6 @@ app.controller('albumsCtrl', function($scope, Album) {
     console.log("album:", album)
     Album.deleteAlbum(album._id)
     .then(album => {
-      //console.log("item to add", item);
       $scope.albums.splice(ind,1);
     })
     .catch(err=>{
@@ -79,42 +78,32 @@ app.controller('albumsCtrl', function($scope, Album) {
 });
 
 
-app.controller('showAlbumCtrl', function($scope, Album, Picture, $stateParams) {
+app.controller('showAlbumCtrl', function($scope, Album, Picture, $stateParams,  $state) {
   console.log('showAlbumCtrl!');
   console.log('$stateParams:', $stateParams);   //this will be apt id
 
+
   $scope.currentPictures = [];
   $scope.availableResidents = $scope.pictures;;
-  //or w/e my func is called
   Album.getById($stateParams.albumId)
     .then(res =>{
       $scope.album = res.data;
       getCurrentPictures()
     })
 
-  //adds picture to picture databse
-  //need to add picture to album
   $scope.addPicture = ()=>{
     Picture.addPicture($scope.newItem)
     .then(picture=>{
       console.log("added" , picture);
-      Album.addPictureToAlbum($stateParams.albumId, picture._id)
+      Album.addPictureToAlbum($stateParams.albumId, picture._id);
+      //not working
+      $state.go($state.$current, null, { reload: true });
+
     })
     .catch(err=>{
       console.log("error: ", err );
     })
   }
-
-  /*function addPictureToAlbum(albumId){
-      Album.addPictureToAlbum(albumId, $scope.cuurPic._id){
-
-      }
-  }*/
-
-    
-    //577aa9c5fb3a05962ef543d4
-    //577aa9cffb3a05962ef543d7
-    //577aad2238bbf4c62e9284ca
 
   $scope.deletePicture = (ind, picId) =>{
     console.log("picture:", picId)
@@ -145,26 +134,6 @@ app.controller('showAlbumCtrl', function($scope, Album, Picture, $stateParams) {
     //console.log('$scope.CurrentResidents', $scope.currentResidents)
   }
 
-
-  /*$scope.showUpdateForm = (index, resident) =>{
-    console.log("index: ", index);
-    console.log("resident: ", resident);
-    $scope.showUpdate =true;
-    $scope.updateItem = resident;
-    $scope.updateIndex = index;
-  }
-
-  $scope.updateResident = () =>{
-    console.log("update res :", $scope.updateItem);
-    $scope.showUpdate =false;
-    Resident.updateResident($scope.updateItem._id, $scope.updateItem)
-    .then(resident =>{
-      console.log("update apt:" , $scope.updateItem._id, " , " , $scope.updateItem);
-    })
-    .catch(err=>{
-      console.log("error: ", err );
-    });
-  }*/
 
 });
 
