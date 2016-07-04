@@ -14,4 +14,9 @@ app.config(function($stateProvider, $urlRouterProvider){
       templateUrl: 'html/showAlbum.html', 
       controller: 'showAlbumCtrl'
       })
+    .state('showPicture', {
+      url: '/album/:albumId/:pictureId', 
+      templateUrl: 'html/showPicture.html', 
+      controller: 'showPictureCtrl'
+      })
 });

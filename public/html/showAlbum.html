@@ -26,7 +26,7 @@
     <tbody>
       <tr ng-repeat = 'picture in currentPictures track by $index'>
       <td > 
-        <a ui-sref = 'showpicture({pictureId: picture._id})'>{{picture.name}}</a>
+        <a ui-sref = 'showPicture({pictureId: picture._id})'> View {{picture.name}}</a>
       </td>
       <td ><img src="{{picture.url}}" alt="picture" style="height:100px"></td>
       <td>

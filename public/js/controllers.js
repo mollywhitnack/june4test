@@ -21,9 +21,6 @@ app.controller('mainCtrl', function($scope, Picture, Album) {
       console.log("err: ", err);
     })
 
-
-
-
 });
 
 app.controller('albumsCtrl', function($scope, Album) {
@@ -171,23 +168,15 @@ app.controller('showAlbumCtrl', function($scope, Album, Picture, $stateParams) {
 
 });
 
-app.controller('showResdientCtrl', function($scope, Resident, $stateParams) {
-  console.log('showResdientCtrl!');
-  console.log('$stateParams:', $stateParams);   //this will be resident id
-
+app.controller('showPictureCtrl', function($scope, Picture, $stateParams) {
+  console.log('showPictureCtrl!');
   //or w/e my func is called
-  Resident.getById($stateParams.residentId)
+  Picture.getById($stateParams.pictureId)
     .then(res =>{
-      $scope.resident = res.data;
+      $scope.picture = res.data;
     })
 });
 
-app.controller('manageCtrl', function($scope, $stateParams, Album, Resident ) {
-  console.log('manageCtrl!');
-
-  //console.log("total Income", Album.allPropertyIncomes())
-  
-});
 
 
 
