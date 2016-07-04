@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Show Apartment</title>
+</head>
+<body ng-app='myApp' ng-controller='showApartmentCtrl'>
+<div class = "container">
+
+<span class = "aptDesc">
+<h1>{{apartment.address}} </h1>
+<div>Description: {{apartment.description}}</div>
+<div>Maximum Occupancy: {{apartment.maxOccupancy}}</div>
+<div>Current Resdients:
+  <span ng-repeat = 'res in currentResidents track by $index' >{{res.name}},  </span>
+</div>
+</span>
+
+<span class = "aptPic">
+  <img src="{{apartment.picture}}" style="width:300px;height:200px;">
+</span>
+
+<hr>
+
+
+<table class = "table resTable" >
+    <thead>
+      <tr>
+        <th>Add New Resident</th>
+      </tr>
+    </thead>
+      <tr ng-repeat = 'resident in availableResidents track by $index'>
+        <td><button class="btn btn-success" ng-click = 'addResident(resident._id)'>Move {{resident.name}} into {{apartment.address}}</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <table class = "table resTable">
+    <thead>
+      <tr>
+        <th>Remove Resident</th>
+      </tr>
+    </thead>
+      <tr ng-repeat = 'resident in currentResidents track by $index'>
+        <td><button class="btn btn-warning" ng-click = 'removeResident(resident._id)'>Move {{resident.name}} out of {{apartment.address}}</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+</body>
+</html>
