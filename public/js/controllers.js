@@ -96,10 +96,8 @@ app.controller('showAlbumCtrl', function($scope, Album, Picture, $stateParams,  
     .then(picture=>{
       console.log("added" , picture);
       Album.addPictureToAlbum($stateParams.albumId, picture._id);
-      //not working
-      $state.go($state.$current, null, { reload: true });
-
     })
+    .then($state.go($state.$current, null, { reload: true }))
     .catch(err=>{
       console.log("error: ", err );
     })
@@ -111,6 +109,8 @@ app.controller('showAlbumCtrl', function($scope, Album, Picture, $stateParams,  
     Picture.deletePicture(picId)
     .then(picture => {
       $scope.pictures.splice(ind,1);
+      $state.go($state.$current, null, { reload: true });
+
     })
     .catch(err=>{
       console.log("error: ", err );

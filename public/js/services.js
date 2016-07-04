@@ -80,6 +80,7 @@ app.service('Album', function($http, $q){
   this.addPictureToAlbum = (albumId, picId) =>{
       return $http.put(`/api/albums/${albumId}/addPicture/${picId}`)
       .then(res => {
+        //$state.go($state.$current, null, { reload: true });
         return $q.resolve(res.data);
       })
       .catch(err => {   
